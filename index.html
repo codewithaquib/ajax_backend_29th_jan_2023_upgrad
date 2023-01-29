@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width='device-width', initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <input type="text" id="bookTitle" />
+    <button id="searchBook">Search</button>
+    <hr>
+    <ul id="bookList"></ul>
+
+    <!-- <h1 id="counter"></h1> -->
+    <script>
+
+        // Google Book Search
+        let searchBook = document.getElementById("searchBook");
+        searchBook.addEventListener("click", findBook);
+
+        function findBook() {
+            // 1. Read the user input from the form
+            let bookTitle = document.getElementById("bookTitle").value;
+
+            // 2. Connect to the Google Books API
+            let myRequest = new XMLHttpRequest(); //readyState = 0
+            myRequest.open("GET", "https://www.googleapis.com/books/v1/volumes?q=" + bookTitle); //readyState = 1
+            myRequest.send(); // readyState = 2
+
+            // When the request is being processed, readyState = 3
+            // After the response is received, readyState = 4
+
+            myRequest.onreadystatechange = () => {
+                if (myRequest.readyState === 4 && myRequest.status === 200) {
+
+                    // 3. Extract the required data
+                    let convertedData = JSON.parse(myRequest.responseText);
+                    console.log(convertedData);
+                    // 4. Display books on the screen
+                    convertedData.items.forEach(element => {
+                        let newBookItem = document.createElement('li');
+                        let bookImage = document.createElement('img');
+                        bookImage.setAttribute("src", element.volumeInfo.imageLinks.thumbnail);
+                        newBookItem.innerHTML = element.volumeInfo.title;
+                        document.getElementById("bookList").appendChild(bookImage);
+                        document.getElementById("bookList").appendChild(newBookItem);
+                    });
+                }
+            }
+        }
+
+
+        // https://www.googleapis.com/books/v1/volumes?q=Narnia
+
+        // Asynchronous Programming
+        // let counter = 0;
+        // setInterval
+        // function incrementCount() {
+        //     counter++;
+        //     document.getElementById("counter").innerText = counter;
+        // }
+        // console.log("Hello");
+        // console.log("World");
+        // let myInterval = setInterval(incrementCount, 3000);
+        // setTimeout
+        // function sayHello() {
+        //     console.log("Hello there!");
+        // }
+        // let myTimeout = setTimeout(sayHello, 5000);
+
+
+        // let jsonData = `{"results":[{"gender":"female","name":{"title":"Ms","first":"Magali","last":"Souza"},"location":{"street":{"number":4144,"name":"Travessa dos Martírios"},"city":"Parnamirim","state":"Pará","country":"Brazil","postcode":77091,"coordinates":{"latitude":"-75.8410","longitude":"159.3842"},"timezone":{"offset":"+2:00","description":"Kaliningrad, South Africa"}},"email":"magali.souza@example.com","login":{"uuid":"9fc86fa8-bf3d-49e1-bf1f-289e7ba0035e","username":"yellowcat568","password":"albion","salt":"9lYJ5fS9","md5":"eb7d36149a7090904b7e68b5cbf3aaa2","sha1":"5985a616c32149befe93315b9fdedbc50437c2f9","sha256":"c99e860d048d81ac60839b54d81e9c8bd2425f4f2e4d8ca6cb530e4ffeefea2a"},"dob":{"date":"1979-12-24T16:08:45.180Z","age":43},"registered":{"date":"2020-02-18T22:49:23.470Z","age":2},"phone":"(66) 0023-9814","cell":"(75) 2118-1090","id":{"name":"CPF","value":"711.432.662-63"},"picture":{"large":"https://randomuser.me/api/portraits/women/43.jpg","medium":"https://randomuser.me/api/portraits/med/women/43.jpg","thumbnail":"https://randomuser.me/api/portraits/thumb/women/43.jpg"},"nat":"BR"}],"info":{"seed":"06c6ed7c0b52cb7f","results":1,"page":1,"version":"1.4"}}`;
+
+        // console.log(jsonData);
+        // JSON to Javascript
+        // let convertedData = JSON.parse(jsonData);
+        // console.log(convertedData);
+        // console.log(convertedData.results[0].email);
+        // document.getElementById("userEmail").innerText = convertedData.results[0].name.title + ' ' + convertedData.results[0].name.first + ' ' + convertedData.results[0].name.last;
+
+        // Javascript to JSON
+        // let finalData = JSON.stringify(convertedData);
+    </script>
+</body>
+
+</html>
